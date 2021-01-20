@@ -8,10 +8,17 @@
 
 import SwiftUI
 
+
 public struct PartialSheetStyle {
 
-    /// The color of the background
-    var backgroundColor: Color
+    /// Background enum
+    public enum PartialSheetBackground {
+        case solid(Color)
+        case blur(UIBlurEffect.Style)
+    }
+    
+    /// The background of the sheet
+    var background: PartialSheetBackground
 
     /// The color of the Handlander Bar and the X button on ipad and mac
     var handlerBarColor: Color
@@ -25,28 +32,26 @@ public struct PartialSheetStyle {
     /// The blur effect style to applied between the partialSheet and the Presenter Conter
     var blurEffectStyle: UIBlurEffect.Style?
 
-    /**
-     The **Style** for the PartialSheet
-     - parameter backgroundColor: The background color of the partial sheet
-     - parameter handlerBarColor: The color of the handler bar to close the partial sheet
-     - parameter enableCover: True if you want a cover enabled between the sheet and the presenter view.
-     - parameter coverColor: The color of the cover,  use the .opacity modifier if you want a transparent effect
-     - parameter blurEffectStyle: If you want a blur effect on the cover, set the effect style, otherwise put it to nil.
-
-     Use `PartialSheetStyle.defaultStyle` if you want a quicker init for the style with default values.
-     */
-    public init(
-        backgroundColor: Color,
-        handlerBarColor: Color,
-        enableCover: Bool,
-        coverColor: Color,
-        blurEffectStyle: UIBlurEffect.Style?
+    /// The corner radius of Sheet
+    var cornerRadius: CGFloat
+    
+    /// Minimum distance between the top of the sheet and the top of the screen
+    var minTopDistance: CGFloat
+    
+    public init(background: PartialSheetBackground,
+                handlerBarColor: Color,
+                enableCover: Bool,
+                coverColor: Color,
+                blurEffectStyle: UIBlurEffect.Style? = nil,
+                cornerRadius: CGFloat,
+                minTopDistance: CGFloat
     ) {
-        self.backgroundColor = backgroundColor
+        self.background = background
         self.handlerBarColor = handlerBarColor
         self.enableCover = enableCover
         self.coverColor = coverColor
-        self.blurEffectStyle = blurEffectStyle
+        self.cornerRadius = cornerRadius
+        self.minTopDistance = minTopDistance
     }
 }
 
@@ -54,18 +59,20 @@ extension PartialSheetStyle {
 
     /** A default Style for the PartialSheet with system colors.
 
-     - backgroundColor: Color(UIColor.tertiarySystemBackground)
+     - background: .solid(Color(UIColor.tertiarySystemBackground))
      - handlerBarColor: Color(UIColor.systemGray2)
      - enableCover: true
      - coverColor: Color.black.opacity(0.4)
      - blurEffectStyle: nil
      */
     public static func defaultStyle() -> PartialSheetStyle {
-        return PartialSheetStyle(backgroundColor: Color(UIColor.tertiarySystemBackground),
+        return PartialSheetStyle(background: .solid(Color(UIColor.tertiarySystemBackground)),
                                  handlerBarColor: Color(UIColor.systemGray2),
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),
-                                 blurEffectStyle: nil
+                                 blurEffectStyle: nil,
+                                 cornerRadius: 10,
+                                 minTopDistance: 110
         )
     }
 }
